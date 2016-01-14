@@ -4,10 +4,10 @@ from matplotlib.pyplot import *
 
 def gradientDescentStep(x, y, theta, alpha):
     y_model = x.dot(theta).flatten()
-    error = (y_model - y.flatten())
-    m=y.size
-    theta[0][0] -= alpha * (1.0/m) * (error).sum();
-    theta[1][0] -= alpha * (1.0/m) * (error*x[:,1]).sum();
+    error = (y.flatten() - y_model)
+    m = y.size
+    theta[0] += alpha * (1.0/m) * (error).sum();
+    theta[1] += alpha * (1.0/m) * (error*x[:,1]).sum();
     return theta
 
 # Generate artificial dataset
@@ -23,21 +23,16 @@ for i in range(2):
 # Linear regression parameters
 iterations = 2000
 lRate = 0.001
-theta = zeros(shape=(2,1))
-
+theta = [0,0]
 
 for i in range(iterations):
     theta = gradientDescentStep(xp, train_y, theta, lRate)
-    if i%1000 == 0:
-        print(i, theta)
 
 print(theta)
-scatter(train_x, train_y, marker='x', color='b')
+scatter(train_x, train_y, marker='x', color='r', label='Training Data')
 result = xp.dot(theta).flatten()
-plot(train_x, result)
+plot(train_x, result, label='Fitted Polynomial')
+title("Linear Regression")
+legend(loc=2)
+grid()
 show()
-
-
-
-
-
