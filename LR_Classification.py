@@ -81,7 +81,6 @@ for lmbda in lmbda_list:
         print("\n")
 
     plot(range(n_min,n_max+1,50), validation_errors, 'xb-')
-    title("Validation Errors X Training Points Considered")
     xlabel("Training Points")
     ylabel("Vaidation Errors")
     grid()
