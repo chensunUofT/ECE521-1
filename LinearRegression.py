@@ -32,7 +32,7 @@ if not sgd:
         errorHist[i] = mse_cost_function(theta, xp, train_y)
     end = time.time()
 else:
-    bsize = int(raw_input("Using SGD. Enter batch size [1]: ") or 1)
+    bsize = int(raw_input("Using SGD. Enter batch size [10]: ") or 10)
     # Perform Stochastic Gradient Descent
     start = time.time()
     for i in range(iterations):

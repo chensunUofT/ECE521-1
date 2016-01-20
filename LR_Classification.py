@@ -17,13 +17,13 @@ iterations = 10000
 lRate = 0.001
 theta = zeros(x.shape[1])
 errorHist = zeros(iterations)
-bsize = int(raw_input("Enter mini-batch size [1]: ") or 1)
-n_min, n_max = raw_input("Enter range of points to use in trainment 'min max': ").split()
+bsize = int(raw_input("Enter mini-batch size [50]: ") or 50)
+n_min, n_max = (raw_input("Enter range of points to use in trainment 'min max' [50 800]: ") or "50 800").split()
 n_min, n_max = int(n_min), int(n_max)
 slmbda = raw_input("Enter Lambda Value [0] or 'S' to sweep values: ")
 if slmbda.lower() == 's':
     print("Sweeping lambda")
-    lmbda_list = [0.0001, 0.001, 0.01, 0.1, 0.5]
+    lmbda_list = [0, 0.0001, 0.001, 0.01, 0.1]
 else:
     lmbda_list = [double(slmbda or 0)]
 
@@ -80,8 +80,10 @@ for lmbda in lmbda_list:
         print("Validation errors: %d" %(validation_errors[k]))
         print("\n")
 
-    plot(range(n_min,n_max+1,50), validation_errors, 'xb-')
+    plot(range(n_min,n_max+1,50), validation_errors, 'x-', label=r"$\lambda$=%f"%(lmbda))
     xlabel("Training Points")
     ylabel("Vaidation Errors")
-    grid()
-    show()
+
+grid()
+legend(loc='best')
+show()

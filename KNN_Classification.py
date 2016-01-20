@@ -35,8 +35,10 @@ for n in n_list:
                 validation_errors[j] += 1
         print("K = %d, N = %d, Validation Errors = %d"%(k,n,validation_errors[j]))
     print(" ")
-    plot(k_list, validation_errors, 'xb-')
-    title('N=%d'%(n))
-    xlabel('Neighbors Considered')
-    ylabel('Validation Errors')
-    show()
+    plot(k_list, validation_errors, 'x-', label="N = %d"%(n))
+
+xlabel('Neighbors Considered')
+ylabel('Validation Errors')
+legend(loc='best')
+grid()
+show()
