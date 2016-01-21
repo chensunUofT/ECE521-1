@@ -29,11 +29,13 @@ for n in n_list:
     for j, k in enumerate(k_list):
         xj = x[:n]
         tj = t[:n]
+        start = time.time()
         for i, xi in enumerate(x_eval):
             ti = knn_classify(xj, tj, xi, k, euclidean_distance)
             if ti != t_eval[i]:
                 validation_errors[j] += 1
-        print("K = %d, N = %d, Validation Errors = %d"%(k,n,validation_errors[j]))
+        end = time.time()
+        print("K = %d, N = %d, Validation Errors = %d, Time = %f"%(k,n,validation_errors[j],end-start))
     print(" ")
     plot(k_list, validation_errors, 'x-', label="N = %d"%(n))
 

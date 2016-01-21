@@ -19,14 +19,14 @@ xpn = xp / xp.max(axis=0)
 
 
 # Linear regression parameters
-iterations = 5000
-lRate = 0.01
+iterations = 10000
 theta = zeros(order)
-errorHist = zeros(iterations)
 
 if not sgd:
     # Perform Gradient Descent
+    lRate = 0.1
     start = time.time()
+    errorHist = zeros(iterations)
     for i in range(iterations):
         theta = gradient_descent_step(xp, train_y, theta, lRate, mse_gradient)
         errorHist[i] = mse_cost_function(theta, xp, train_y)
@@ -34,9 +34,12 @@ if not sgd:
 else:
     bsize = int(raw_input("Using SGD. Enter batch size [10]: ") or 10)
     # Perform Stochastic Gradient Descent
+    iterationss = iterations / bsize
+    lRate = 0.01
     start = time.time()
+    errorHist = zeros(iterations)
     for i in range(iterations):
-        theta = stochastic_gradient_descent_step(xp, train_y, theta, lRate, mse_gradient, bsize)
+        theta = stochastic_gradient_descent_epoch(xp, train_y, theta, lRate, mse_gradient, bsize)
         errorHist[i] = mse_cost_function(theta, xp, train_y)
     end = time.time()
 

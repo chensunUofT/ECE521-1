@@ -1,15 +1,20 @@
 from numpy import *
 from matplotlib.pyplot import *
 
-# Do a single step of stochastic gradient descent
-def stochastic_gradient_descent_step(x, y, theta, alpha, derror, batch_size):
-    random_indexes = random.permutation(y.size)[0:batch_size]
+# Do an epoch of stochastic gradient descent
+def stochastic_gradient_descent_epoch(x, y, theta, alpha, derror, batch_size):
+    batch = y.size
+    epochs = batch / batch_size
+    random_indexes = random.permutation(batch)
     x = x[random_indexes]
     y = y[random_indexes]
     order = shape(x)[1]
-    grad = derror(theta, x, y)
-    for i in range(0, order):
-        theta[i] += alpha * grad[i]
+    for k in range(epochs):
+        xk = x[k*batch_size:(k+1)*batch_size]
+        yk = y[k*batch_size:(k+1)*batch_size]
+        grad = derror(theta, xk, yk)
+        for i in range(0, order):
+            theta[i] += alpha * grad[i]
     return theta
 
 # Do a single step of gradient descent
