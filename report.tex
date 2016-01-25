@@ -204,7 +204,6 @@ Using a larger training set increased the algorithm's accuracy since it makes da
 
 \clearpage
 \end{homeworkProblem}
-
 %----------------------------------------------------------------------------------------
 
 
@@ -231,7 +230,6 @@ Smaller values of K tend to lead to over-fitting when the decision boundary for 
 
 \clearpage
 \end{homeworkProblem}
-
 %----------------------------------------------------------------------------------------
 
 
@@ -250,7 +248,7 @@ Smaller values of K tend to lead to over-fitting when the decision boundary for 
     \label{fig:task3}
 \end{figure*}
 
-We first normalize the dataset by the maximum value to prevent overflows. Fitting the data to a first order polynomial with stochastic gradient descent yields the following model:
+We first normalize the dataset by the maximum value to prevent overflows. Fitting the data to a first order polynomial with gradient descent yields the following model:
 
 \begin{figure*}[h!]
     \centering
@@ -261,7 +259,6 @@ We first normalize the dataset by the maximum value to prevent overflows. Fittin
 
 \clearpage
 \end{homeworkProblem}
-
 %----------------------------------------------------------------------------------------
 
 
@@ -291,7 +288,6 @@ By using non linear parameters we give more malleability to the model since it c
 
 \clearpage
 \end{homeworkProblem}
-
 %----------------------------------------------------------------------------------------
 
 
@@ -318,7 +314,6 @@ For the same reason as discussed in \autoref{t:1}, larger values of N provide be
 
 \clearpage
 \end{homeworkProblem}
-
 %----------------------------------------------------------------------------------------
 
 
@@ -328,6 +323,7 @@ For the same reason as discussed in \autoref{t:1}, larger values of N provide be
 %----------------------------------------------------------------------------------------
 
 \begin{homeworkProblem}
+\label{t:6}
 
 \begin{figure*}[h!]
     \centering
@@ -336,9 +332,10 @@ For the same reason as discussed in \autoref{t:1}, larger values of N provide be
     \label{fig:task6}
 \end{figure*}
 
+The behaviour of the model suggests that there is no over-fitting happening.
+
 \clearpage
 \end{homeworkProblem}
-
 %----------------------------------------------------------------------------------------
 
 
@@ -360,11 +357,10 @@ For the same reason as discussed in \autoref{t:1}, larger values of N provide be
     ]{results/Task_7.csv}
 \end{center}
 
-A value of $\lambda = 0.1$ improves the model by decaying the weights and reducing over-fitting, improving the accuracy even with such a small dataset (50 points).
+Since the model is not suffering from over-fitting (as discussed in \autoref{t:6}), the smaller values of lambda have no noticeable affect on the accuracy; larger values of lambda, however, lead to under-fitting.
 
 \clearpage
 \end{homeworkProblem}
-
 %----------------------------------------------------------------------------------------
 
 \end{document}
