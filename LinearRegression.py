@@ -1,7 +1,6 @@
 from gradient_descent import *
 from cost_functions import mse_cost_function, mse_gradient
 from matplotlib.pyplot import *
-import time
 
 # Generate artificial dataset
 train_x = linspace(1.0, 10.0, num=100)[:, newaxis]
@@ -19,10 +18,9 @@ xpn = xp / xp.max(axis=0)
 
 
 # Linear regression parameters
-iterations = 1500
-conv = 1e-5
+iterations = 10000
+conv = 1e-6
 theta = zeros(order)
-ltheta = ones(order)
 converged = False
 
 if not sgd:
@@ -35,12 +33,14 @@ if not sgd:
         theta = gradient_descent_step(xp, train_y, theta, lRate, mse_gradient)
         errorHist.append(mse_cost_function(theta, xp, train_y))
         if i>1:
-            converged = True if abs(errorHist[-1] - errorHist[-2]) < conv else False
+            if errorHist[-2] - errorHist[-1] < conv:
+                converged = True
+                print "Converged after %d iterations" %(i)
         i+=1
 else:
     bsize = int(raw_input("Using SGD. Enter batch size [10]: ") or 10)
     # Perform Stochastic Gradient Descent
-    iterationss = iterations / bsize
+    iterations /= bsize
     lRate = 0.1
     errorHist = []
     i = 0
@@ -48,8 +48,10 @@ else:
         ltheta = theta
         theta = stochastic_gradient_descent_epoch(xp, train_y, theta, lRate, mse_gradient, bsize)
         errorHist.append(mse_cost_function(theta, xp, train_y))
-        if i>1:
-            converged = True if abs(errorHist[-1] - errorHist[-2]) < conv else False
+        if i>2:
+            if errorHist[-2] - errorHist[-1] < conv:
+                converged = True
+                print "Converged after %d epochs" %(i)
         i+=1
 
 print("Final cost: %f" %(errorHist[-1]))
@@ -81,11 +83,11 @@ if order == 2:
     plot_cost_function(theta, xp, train_y, mse_cost_function)
     tight_layout()
     savefig("results/Task_3.eps")
-    show(block=False)
+    show()
     plot_equation(theta, "results/Task_3_eq.pgf")
 
 else:
     tight_layout()
     savefig("results/Task_4.eps")
-    show(block=False)
+    show()
     plot_equation(theta, "results/Task_4_eq.pgf")

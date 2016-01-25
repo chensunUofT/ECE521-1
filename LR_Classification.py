@@ -12,9 +12,8 @@ x = append(x,ones([shape(x)[0],1]),1)
 x_eval = append(x_eval,ones([shape(x_eval)[0],1]),1)
 
 # Linear regression parameters
-iterations = 5000
+iterations = 10000
 lRate = 0.01
-conv = 1e-5
 bsize = int(raw_input("Enter mini-batch size [50]: ") or 50)
 
 sn = (raw_input("Enter train set size or 'S' to sweep values [s]: ") or "s")
@@ -50,6 +49,7 @@ for l, lmbda in enumerate(lmbda_list):
         epoch_error_eval = []
         epoch_error_train = []
         errorHist = []
+        conv = 1e-6
         converged = False
         j=0
         while j < epochs and not converged:
@@ -59,7 +59,8 @@ for l, lmbda in enumerate(lmbda_list):
                 theta = gradient_descent_step(xp, tp, theta, lRate, derr_func)
             errorHist.append(euclidean_cost_function(theta, xp, tp, lmbda))
             if j>1:
-                converged = True if abs(errorHist[-1] - errorHist[-2]) < conv else False
+                if abs(errorHist[-2] - errorHist[-1]) < conv:
+                    converged = True
             if(verbose_plot):
                 epoch_error_eval.append(0)
                 epoch_error_train.append(0)
@@ -80,16 +81,16 @@ for l, lmbda in enumerate(lmbda_list):
             legend(loc='best')
             grid()
             savefig("results/Task_6.eps")
-            show(block=False)
+            show()
 
             # Plot cost history - Debugging
-            # plot(range(j), errorHist)
-            # title("Cost History N=%d" %(points))
-            # xlabel("Epoch")
-            # ylabel("Cost")
-            # legend(loc='best')
-            # grid()
-            # show(block=False)
+            plot(range(j), errorHist)
+            title("Cost History N=%d" %(points))
+            xlabel("Epoch")
+            ylabel("Cost")
+            legend(loc='best')
+            grid()
+            show()
 
 
         # Validate model
@@ -97,7 +98,8 @@ for l, lmbda in enumerate(lmbda_list):
             pred = 1 if xi.dot(theta) > 0.5 else 0
             if pred != t_eval[i]:
                 validation_errors[k, l]+=1
-        print("Lambda = %f, N = %d, Validation errors: %d" %(lmbda, points, validation_errors[k, l]))
+        print("Lambda = %f, N = %d, Validation errors: %d, Epochs for Convergence: %d"
+              %(lmbda, points, validation_errors[k, l], j))
 
 if len(nlist) > 1 and len(lmbda_list) > 1:
     for i, lmbda in enumerate(lmbda_list):
@@ -122,4 +124,4 @@ elif len(lmbda_list) > 1:
     savefig("results/Task_7.eps")
     savetxt("results/Task_7.csv", array(zip(lmbda_list, validation_errors[0,:])), fmt='%.4f %i')
 
-show(block=False)
+show()

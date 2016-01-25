@@ -57,6 +57,4 @@ elif len(n_list) > 1:
     savefig("results/Task_1.eps")
     savetxt("results/Task_1.csv", array(zip(n_list, validation_errors[0,:])), fmt='%i %i')
 
-else:
-    savefig("knn")
-show(block=False)
+show()
