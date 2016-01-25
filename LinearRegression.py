@@ -19,55 +19,73 @@ xpn = xp / xp.max(axis=0)
 
 
 # Linear regression parameters
-iterations = 10000
+iterations = 1500
+conv = 1e-5
 theta = zeros(order)
+ltheta = ones(order)
+converged = False
 
 if not sgd:
     # Perform Gradient Descent
-    lRate = 0.1
-    start = time.time()
-    errorHist = zeros(iterations)
-    for i in range(iterations):
+    lRate = 0.5
+    errorHist = []
+    i = 0
+    while i < iterations and not converged:
+        ltheta = theta
         theta = gradient_descent_step(xp, train_y, theta, lRate, mse_gradient)
-        errorHist[i] = mse_cost_function(theta, xp, train_y)
-    end = time.time()
+        errorHist.append(mse_cost_function(theta, xp, train_y))
+        if i>1:
+            converged = True if abs(errorHist[-1] - errorHist[-2]) < conv else False
+        i+=1
 else:
     bsize = int(raw_input("Using SGD. Enter batch size [10]: ") or 10)
     # Perform Stochastic Gradient Descent
     iterationss = iterations / bsize
-    lRate = 0.01
-    start = time.time()
-    errorHist = zeros(iterations)
-    for i in range(iterations):
+    lRate = 0.1
+    errorHist = []
+    i = 0
+    while i < iterations and not converged:
+        ltheta = theta
         theta = stochastic_gradient_descent_epoch(xp, train_y, theta, lRate, mse_gradient, bsize)
-        errorHist[i] = mse_cost_function(theta, xp, train_y)
-    end = time.time()
+        errorHist.append(mse_cost_function(theta, xp, train_y))
+        if i>1:
+            converged = True if abs(errorHist[-1] - errorHist[-2]) < conv else False
+        i+=1
 
-print("Time elapsed: %f" %(end-start))
 print("Final cost: %f" %(errorHist[-1]))
 # Display Results
 print(theta)
 
 # Plot Adjusted Model
-figure()
 subplot(1,2,1)
 plot_model(theta, train_x, train_y)
 
 # Plot error history
 if order == 2:
-    subplot(2,2,2)
+    ax = subplot(2,2,2)
 else:
-    subplot(1,2,2)
-ax = plot(range(iterations), errorHist)
+    ax = subplot(1,2,2)
+
+plot(range(i), errorHist)
 title("Cost History")
 xlabel("Iteration")
 ylabel("Cost")
-xscale('log')
+props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
+ax.text(0.97, 0.95, "Final cost: %f" %(errorHist[-1]), transform=ax.transAxes, fontsize=14,
+        verticalalignment='top', ha='right', bbox=props)
 grid()
 
 if order == 2:
     # Plot contour of MSE
     subplot(2,2,4)
     plot_cost_function(theta, xp, train_y, mse_cost_function)
+    tight_layout()
+    savefig("results/Task_3.eps")
+    show(block=False)
+    plot_equation(theta, "results/Task_3_eq.pgf")
 
-show()
+else:
+    tight_layout()
+    savefig("results/Task_4.eps")
+    show(block=False)
+    plot_equation(theta, "results/Task_4_eq.pgf")
