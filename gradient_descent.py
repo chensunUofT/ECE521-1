@@ -53,3 +53,26 @@ def plot_cost_function(theta, xp, train_y, costfun):
     xlabel(r"$\theta_1$")
     ylabel(r"$\theta_0$")
     legend(loc=2)
+
+def plot_equation(theta, file):
+    '''
+    Adapted from http://stackoverflow.com/questions/14110709/creating-images-of-mathematical-expressions-from-tex-using-matplotlib
+    '''
+    formula = "$f(x) = %f" %(theta[0])
+    for i, coef in enumerate(theta[1:]):
+        formula += " + (%f) \cdot x^%d" %(coef, i+1)
+    formula += "$"
+
+    fig = figure()
+    text = fig.text(0, 0, formula)
+    dpi = 300
+    fig.savefig(file, dpi=dpi)
+
+    bbox = text.get_window_extent()
+    width, height = bbox.size / float(dpi) + 0.005
+    fig.set_size_inches((width, height))
+
+    dy = (bbox.ymin/float(dpi))/height
+    text.set_position((0, -dy))
+
+    fig.savefig(file, dpi=dpi)
