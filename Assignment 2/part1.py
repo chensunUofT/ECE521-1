@@ -45,7 +45,7 @@ accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
 
 
 # Initialize variables
-sess = tf.Session()
+sess = tf.InteractiveSession()
 init = tf.initialize_all_variables()
 sess.run(init)
 
@@ -112,4 +112,12 @@ plt.title("Accuracy History")
 plt.xlabel("Epoch")
 plt.ylabel("Accuracy")
 plt.grid()
+
+plt.figure()
+ws = W.eval()
+plt.suptitle("Weight Visualization")
+for i in range(10):
+    plt.subplot(3,4,i+1)
+    plt.imshow(ws[:,i].reshape(28,28))
+    plt.title(string.ascii_uppercase[i])
 plt.show()
