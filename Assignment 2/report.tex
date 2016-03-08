@@ -1,0 +1,510 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Programming/Coding Assignment
+% LaTeX Template
+%
+% This template has been downloaded from:
+% http://www.latextemplates.com
+%
+% Original author:
+% Ted Pavlic (http://www.tedpavlic.com)
+%
+% Note:
+% The \lipsum[#] commands throughout this template generate dummy text
+% to fill the template out. These commands should all be removed when 
+% writing assignment content.
+%
+% This template uses a Perl script as an example snippet of code, most other
+% languages are also usable. Configure them in the "CODE INCLUSION 
+% CONFIGURATION" section.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass{article}
+
+\usepackage{fancyhdr} % Required for custom headers
+\usepackage{lastpage} % Required to determine the last page for the footer
+\usepackage{extramarks} % Required for headers and footers
+\usepackage[usenames,dvipsnames]{color} % Required for custom colors
+\usepackage{graphicx} % Required to insert images
+\usepackage{listings} % Required for insertion of code
+\usepackage{courier} % Required for the courier font
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
+\usepackage{pgfplotstable} % Import csv data
+\usepackage{amsmath} % Math equation tools
+\usepackage{hyperref} % Create references\pgfplotsset{compat=1.12}
+\usepackage{filecontents}% Used so that the external files can be placed in this file
+\usepackage{pgf} % Loops in latex
+\usepackage{bookmark}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{siunitx} % Formats the units and values
+
+% Setup siunitx:
+\sisetup{
+  round-mode          = places, % Rounds numbers
+  round-precision     = 4, % to 2 places
+}
+
+% Margins
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1} % Line spacing
+\renewcommand{\tableautorefname}{Table} % PS
+
+% Set up the header and footer
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName} % Top left header
+\chead{\hmwkClass\ (\hmwkClassTime): \hmwkTitle} % Top center head
+%\rhead{\firstxmark} % Top right header
+\lfoot{\lastxmark} % Bottom left footer
+\cfoot{} % Bottom center footer
+\rfoot{Page\ \thepage\ of\ \protect\pageref{LastPage}} % Bottom right footer
+\renewcommand\headrulewidth{0.4pt} % Size of the header rule
+\renewcommand\footrulewidth{0.4pt} % Size of the footer rule
+
+\DeclareGraphicsExtensions{.eps,.pdf,.png,.jpg}
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs
+
+%----------------------------------------------------------------------------------------
+%	CODE INCLUSION CONFIGURATION
+%----------------------------------------------------------------------------------------
+
+\definecolor{MyDarkGreen}{rgb}{0.0,0.4,0.0} % This is the color used for comments
+\lstloadlanguages{Perl} % Load Perl syntax for listings, for a list of other languages supported see: ftp://ftp.tex.ac.uk/tex-archive/macros/latex/contrib/listings/listings.pdf
+\lstset{language=Perl, % Use Perl in this example
+        frame=single, % Single frame around code
+        basicstyle=\small\ttfamily, % Use small true type font
+        keywordstyle=[1]\color{Blue}\bf, % Perl functions bold and blue
+        keywordstyle=[2]\color{Purple}, % Perl function arguments purple
+        keywordstyle=[3]\color{Blue}\underbar, % Custom functions underlined and blue
+        identifierstyle=, % Nothing special about identifiers                                         
+        commentstyle=\usefont{T1}{pcr}{m}{sl}\color{MyDarkGreen}\small, % Comments small dark green courier font
+        stringstyle=\color{Purple}, % Strings are purple
+        showstringspaces=false, % Don't put marks in string spaces
+        tabsize=5, % 5 spaces per tab
+        %
+        % Put standard Perl functions not included in the default language here
+        morekeywords={rand},
+        %
+        % Put Perl function parameters here
+        morekeywords=[2]{on, off, interp},
+        %
+        % Put user defined functions here
+        morekeywords=[3]{test},
+       	%
+        morecomment=[l][\color{Blue}]{...}, % Line continuation (...) like blue comment
+        numbers=left, % Line numbers on left
+        firstnumber=1, % Line numbers start with line 1
+        numberstyle=\tiny\color{Blue}, % Line numbers are blue and small
+        stepnumber=5 % Line numbers go in steps of 5
+}
+
+% Creates a new command to include a perl script, the first parameter is the filename of the script (without .pl), the second parameter is the caption
+\newcommand{\perlscript}[2]{
+\begin{itemize}
+\item[]\lstinputlisting[caption=#2,label=#1]{#1.pl}
+\end{itemize}
+}
+
+%----------------------------------------------------------------------------------------
+%	DOCUMENT STRUCTURE COMMANDS
+%	Skip this unless you know what you're doing
+%----------------------------------------------------------------------------------------
+
+% Header and footer for when a page split occurs within a problem environment
+\newcommand{\enterProblemHeader}[1]{
+%\nobreak\extramarks{#1}{#1 continued on next page\ldots}\nobreak
+%\nobreak\extramarks{#1 (continued)}{#1 continued on next page\ldots}\nobreak
+}
+
+% Header and footer for when a page split occurs between problem environments
+\newcommand{\exitProblemHeader}[1]{
+%\nobreak\extramarks{#1 (continued)}{#1 continued on next page\ldots}\nobreak
+%\nobreak\extramarks{#1}{}\nobreak
+}
+
+\setcounter{secnumdepth}{0} % Removes default section numbers
+\newcounter{homeworkProblemCounter} % Creates a counter to keep track of the number of problems
+\setcounter{homeworkProblemCounter}{0}
+
+\newcommand{\homeworkProblemName}{}
+\newenvironment{homeworkProblem}[1][Task \arabic{homeworkProblemCounter}]{ % Makes a new environment called homeworkProblem which takes 1 argument (custom name) but the default is "Problem #"
+\def\sectionautorefname{Part}
+\refstepcounter{homeworkProblemCounter}%
+\renewcommand{\homeworkProblemName}{#1} % Assign \homeworkProblemName the name of the problem
+\section{\homeworkProblemName} % Make a section in the document with the custom problem count
+\enterProblemHeader{\homeworkProblemName} % Header and footer within the environment
+}{
+\exitProblemHeader{\homeworkProblemName} % Header and footer after the environment
+}
+
+\newcommand{\problemAnswer}[1]{ % Defines the problem answer command with the content as the only argument
+\noindent\framebox[\columnwidth][c]{\begin{minipage}{0.98\columnwidth}#1\end{minipage}} % Makes the box around the problem answer and puts the content inside
+}
+
+\newcommand{\homeworkSectionName}{}
+\newenvironment{homeworkSection}[1]{ % New environment for sections within homework problems, takes 1 argument - the name of the section
+\renewcommand{\homeworkSectionName}{#1} % Assign \homeworkSectionName to the name of the section from the environment argument
+\subsection{\homeworkSectionName} % Make a subsection with the custom name of the subsection
+\enterProblemHeader{\homeworkProblemName\ [\homeworkSectionName]} % Header and footer within the environment
+}{
+\enterProblemHeader{\homeworkProblemName} % Header and footer after the environment
+}
+
+%----------------------------------------------------------------------------------------
+%	NAME AND CLASS SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\hmwkTitle}{Assignment 2} % Assignment title
+\newcommand{\hmwkDueDate}{Wednesday,\ February\ 17,\ 2016} % Due date
+\newcommand{\hmwkClass}{ECE521} % Course/class
+\newcommand{\hmwkClassTime}{L0101} % Class/lecture time
+\newcommand{\hmwkAuthorName}{Davi Frossard} % Your name
+
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\title{
+\vspace{2in}
+\textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+\normalsize\vspace{0.1in}\small{Due\ on\ \hmwkDueDate}\\
+\vspace{0.1in}
+\vspace{3in}
+}
+
+\author{\textbf{\hmwkAuthorName}}
+%\date{} % Insert date here if you want it to appear below your name
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle
+\clearpage
+
+
+%----------------------------------------------------------------------------------------
+%	PART 1
+%----------------------------------------------------------------------------------------
+
+
+\begin{homeworkProblem}
+\label{part1}
+
+
+The training procedure goes up to a maximum of 500 epochs with a learning rate of 0.01 and momentum of 0.05. The validation cost is checked every 10 epochs and compared to the last value checked, if it is more than 1\% bigger, an early stop is triggered. As can be see in \autoref{fig:task1_cost}, an early stop is not triggered and there are no strong signs of over-fitting. From the model we obtain the results shown in \autoref{tab:task1_best}, as evaluated on the test set.
+
+\begin{table}[H]
+\centering
+\pgfplotstabletypeset[
+    col sep=comma,
+    string type,
+    display columns/0/.style={column name=\textbf{Log-Likelihood Cost}, column type={|S|}},
+    display columns/1/.style={column name=\textbf{Accuracy (\%)}, column type={S|}},
+    every head row/.style={before row=\hline,after row=\hline},
+    every last row/.style={after row=\hline},
+    ]{results/part1_best.csv}
+\caption{Evaluation of the model on test set.}
+\label{tab:task1_best}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\columnwidth]{results/part1_cost.pdf}
+    \caption{Log likelihood cost for each epoch.}
+    \label{fig:task1_cost}
+\end{figure}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\columnwidth]{results/part1_accuracy.pdf}
+    \caption{Accuracy of the model for each epoch}
+    \label{fig:task1_accuracy}
+\end{figure}
+
+
+
+\clearpage
+\end{homeworkProblem}
+%----------------------------------------------------------------------------------------
+
+
+
+%----------------------------------------------------------------------------------------
+%	PART 2
+%----------------------------------------------------------------------------------------
+
+
+\begin{homeworkProblem}
+\label{part2}
+
+In order to determine reasonable values for the hyperparameters we randomize a set of 5 rates from 0.001 to 0.09 and fix the momentum at 5 times the learning rate, which proved to be a reasonable value both in \autoref{part1} and throughout this experiment. From the swipe we obtain the values shown in \autoref{tab:task2_search}. We then select the best model according to the validation log-likelihood cost, from which we obtain \autoref{tab:task2_best}. Plotting the training curves for said model we obtain \autoref{fig:task2_cost} and \autoref{fig:task2_accuracy}.
+
+Using the same criteria for early-stopping as in \autoref{part1}, we notice that bigger learning rates trigger early stops more often than smaller ones and this method proved reasonably effective in returning a good model, although its trigger criteria requires some tuning.
+
+\begin{table}[H]
+\centering
+\resizebox{\columnwidth}{!}{
+\pgfplotstabletypeset[
+    col sep=comma,
+    string type,
+    display columns/0/.style={column name=\textbf{Learning}, column type={|S|}},
+    display columns/1/.style={column name=\textbf{Momentum}, column type={S|}},
+    display columns/2/.style={column name=\textbf{Training}, column type={S|}},
+    display columns/3/.style={column name=\textbf{Validation}, column type={S|}},
+    display columns/4/.style={column name=\multicolumn{1}{c|}{\textbf{Test}}, column type={S|}},
+    display columns/5/.style={column name=\textbf{Training}, column type={S|}},
+    display columns/6/.style={column name=\textbf{Validation}, column type={S|}},
+    display columns/7/.style={column name=\multicolumn{1}{c|}{\textbf{Test}}, column type={S|}},
+    every head row/.style={before row=\hline \multicolumn{2}{|c|}{\textbf{Hyperparameters}} & \multicolumn{3}{c|}{\textbf{Cost}} & \multicolumn{3}{c|}{\textbf{Accuracy (\%)}}\\\hline,after row=\hline},
+    every last row/.style={after row=\hline},
+    ]{results/part2.csv}
+}
+\caption{Hyperparameter search.}
+\label{tab:task2_search}
+\end{table}
+
+\begin{table}[H]
+\centering
+\pgfplotstabletypeset[
+    col sep=comma,
+    string type,
+    display columns/0/.style={column name=\multicolumn{1}{|c|}{\textbf{Learning}}, column type={|S|}},
+    display columns/1/.style={column name=\multicolumn{1}{c|}{\textbf{Momentum}}, column type={S|}},
+    display columns/2/.style={column name=\multicolumn{1}{c|}{\textbf{Cost}}, column type={S|}},
+    display columns/3/.style={column name=\multicolumn{1}{c|}{\textbf{Accuracy (\%)}}, column type={S|}},
+    every head row/.style={before row=\hline ,after row=\hline},
+    every last row/.style={after row=\hline},
+    ]{results/part2_best.csv}
+\caption{Evaluation of best model from swipe on test set.}
+\label{tab:task2_best}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\columnwidth]{results/part2_best_cost.pdf}
+    \caption{Log likelihood cost for each epoch in the training of the best model.}
+    \label{fig:task2_cost}
+\end{figure}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\columnwidth]{results/part2_best_accuracy.pdf}
+    \caption{Accuracy of the model for each epoch in the training of the best model}
+    \label{fig:task2_accuracy}
+\end{figure}
+
+\clearpage
+\end{homeworkProblem}
+%----------------------------------------------------------------------------------------
+
+
+%
+%----------------------------------------------------------------------------------------
+%	PART 3
+%----------------------------------------------------------------------------------------
+
+
+\begin{homeworkProblem}
+
+In order to determine the best topology from the ones suggested, we use the optimum hyperparameters found in \autoref{part2} and train three neural networks, each with one of the topologies, obtaining \autoref{tab:task3_search}. We then select the one with the minimum log-likelihood cost for the validation set, which gives us \autoref{tab:task3_best}. Plotting the training curves we get \autoref{fig:task3_cost} and \autoref{fig:task3_accuracy}.
+
+Using the validation cost as the comparison reference, as we have been doing so far, we notice no major impact caused by the number of hidden layers in this range, they all produced reasonable results. By our metrics the best model is the one with 500 hidden units.
+
+\begin{table}[H]
+\centering
+\resizebox{\columnwidth}{!}{
+\pgfplotstabletypeset[
+    col sep=comma,
+    string type,
+    display columns/0/.style={column name=\textbf{}, column type={|c|}},
+    display columns/1/.style={column name=\textbf{Training}, column type={S|}},
+    display columns/2/.style={column name=\textbf{Validation}, column type={S|}},
+    display columns/3/.style={column name=\multicolumn{1}{c|}{\textbf{Test}}, column type={S|}},
+    display columns/4/.style={column name=\textbf{Training}, column type={S|}},
+    display columns/5/.style={column name=\textbf{Validation}, column type={S|}},
+    display columns/6/.style={column name=\multicolumn{1}{c|}{\textbf{Test}}, column type={S|}},
+    every head row/.style={before row=\hline \multicolumn{1}{|c|}{\textbf{Topology}} & \multicolumn{3}{c|}{\textbf{Cost}} & \multicolumn{3}{c|}{\textbf{Accuracy (\%)}}\\\hline,after row=\hline},
+    every last row/.style={after row=\hline},
+    ]{results/part3.csv}
+}
+\caption{Topology Swipe.}
+\label{tab:task3_search}
+\end{table}
+
+\begin{table}[H]
+\centering
+\pgfplotstabletypeset[
+    col sep=comma,
+    string type,
+    display columns/0/.style={column name=\multicolumn{1}{|c|}{\textbf{Topology}}, column type={|c|}},
+    display columns/1/.style={column name=\multicolumn{1}{c|}{\textbf{Cost}}, column type={S|}},
+    display columns/2/.style={column name=\multicolumn{1}{c|}{\textbf{Accuracy (\%)}}, column type={S|}},
+    every head row/.style={before row=\hline ,after row=\hline},
+    every last row/.style={after row=\hline},
+    ]{results/part3_best.csv}
+\caption{Evaluation of best model from swipe on test set.}
+\label{tab:task3_best}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\columnwidth]{results/part3_best_cost.pdf}
+    \caption{Log likelihood cost for each epoch in the training of the best model.}
+    \label{fig:task3_cost}
+\end{figure}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\columnwidth]{results/part3_best_accuracy.pdf}
+    \caption{Accuracy of the model for each epoch in the training of the best model}
+    \label{fig:task3_accuracy}
+\end{figure}
+
+\clearpage
+\end{homeworkProblem}
+%----------------------------------------------------------------------------------------
+
+%
+%----------------------------------------------------------------------------------------
+%	PART 4
+%----------------------------------------------------------------------------------------
+
+
+\begin{homeworkProblem}
+
+Instead of using a single layer and varying the number of hidden units, we now train a neural network with two layers with 500 units in each one. We obtain the results shown in \autoref{tab:task4_best}. With the training curves shown in \autoref{fig:task4_cost} and \autoref{fig:task4_accuracy}.
+
+From the experiment we conclude that a two layer topology provides results in the same range as those obtained with a single hidden layer. During the parameter tuning phase we also noticed that this topology is more prone to overfitting.
+
+\begin{table}[H]
+\centering
+\pgfplotstabletypeset[
+    col sep=comma,
+    string type,
+    display columns/0/.style={column name=\textbf{Log-Likelihood Cost}, column type={|S|}},
+    display columns/1/.style={column name=\textbf{Accuracy (\%)}, column type={S|}},
+    every head row/.style={before row=\hline,after row=\hline},
+    every last row/.style={after row=\hline},
+    ]{results/part4_best.csv}
+\caption{Evaluation of the model on test set.}
+\label{tab:task4_best}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\columnwidth]{results/part4_cost.pdf}
+    \caption{Log likelihood cost for each epoch in the training of the best model.}
+    \label{fig:task4_cost}
+\end{figure}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\columnwidth]{results/part4_accuracy.pdf}
+    \caption{Accuracy of the model for each epoch in the training of the best model}
+    \label{fig:task4_accuracy}
+\end{figure}
+
+\clearpage
+\end{homeworkProblem}
+%----------------------------------------------------------------------------------------
+
+
+%----------------------------------------------------------------------------------------
+%	PART 5
+%----------------------------------------------------------------------------------------
+
+
+\begin{homeworkProblem}
+
+To evaluate dropout as a method to avoid overfitting we disable early stopping and use a 50\% chance of keeping the weights. With this model we obtain the results shown in \autoref{tab:task5_best}, with training curves shown in \autoref{fig:task5_cost} and \autoref{fig:task5_accuracy}. 
+
+Comparing to the model obtained in \autoref{part2} with no dropout, we notice that dropout is effective in avoiding overfitting without the need of subtle analysis of how the validation cost is behaving as in early stopping.
+
+
+\begin{table}[H]
+\centering
+\pgfplotstabletypeset[
+    col sep=comma,
+    string type,
+    display columns/0/.style={column name=\textbf{Log-Likelihood Cost}, column type={|S|}},
+    display columns/1/.style={column name=\textbf{Accuracy (\%)}, column type={S|}},
+    every head row/.style={before row=\hline,after row=\hline},
+    every last row/.style={after row=\hline},
+    ]{results/part5_best.csv}
+\caption{Evaluation of the model on test set.}
+\label{tab:task5_best}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\columnwidth]{results/part5_cost.pdf}
+    \caption{Log likelihood cost for each epoch in the training of the best model.}
+    \label{fig:task5_cost}
+\end{figure}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\columnwidth]{results/part5_accuracy.pdf}
+    \caption{Accuracy of the model for each epoch in the training of the best model}
+    \label{fig:task5_accuracy}
+\end{figure}
+
+\clearpage
+\end{homeworkProblem}
+%----------------------------------------------------------------------------------------
+
+
+%----------------------------------------------------------------------------------------
+%	PART 6
+%----------------------------------------------------------------------------------------
+
+
+\begin{homeworkProblem}
+
+For this experiment we train 40 different neural networks. Each time a learning rate from 0.09 to 0.0001 is used, momentum is always double the learning rate (we are more conservative since higher multipliers were leading to divergence in some cases), the number of layers varies from 1 to 3 and each layer might have from 100 to 500 units. For each model we train it with and without dropout, early stopping is never used. With these parameters we obtain the results shown in \autoref{tab:task6}, sorted by the validation cost.
+
+\begin{table}[H]
+\centering
+\resizebox{\columnwidth}{!}{
+\pgfplotstabletypeset[
+    col sep=comma,
+    string type,
+    display columns/0/.style={column name=\textbf{Learning}, column type={|S|}},
+    display columns/1/.style={column name=\textbf{Topology}, column type={c|}},
+    display columns/2/.style={column name=\textbf{Dropout}, column type={c|}},
+    display columns/3/.style={column name=\textbf{Momentum}, column type={S|}},
+    display columns/4/.style={column name=\multicolumn{1}{c|}{\textbf{Cost}}, column type={S|}},
+    display columns/5/.style={column name=\multicolumn{1}{c|}{\textbf{Accuracy}}, column type={S|}},
+    display columns/6/.style={column name=\multicolumn{1}{c|}{\textbf{Cost}}, column type={S|}},
+    display columns/7/.style={column name=\multicolumn{1}{c|}{\textbf{Accuracy}}, column type={S|}},
+    every head row/.style={before row=\hline \multicolumn{4}{|c|}{\textbf{Hyperparameters}} & \multicolumn{2}{c|}{\textbf{Validation}} & \multicolumn{2}{c|}{\textbf{Test}}\\\hline,after row=\hline},
+    every last row/.style={after row=\hline},
+    ]{results/part6.csv}
+}
+\caption{Hyperparameter search.}
+\label{tab:task6}
+\end{table}
+
+\clearpage
+\end{homeworkProblem}
+%----------------------------------------------------------------------------------------
+
+
+\end{document}

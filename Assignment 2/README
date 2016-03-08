@@ -1,0 +1,6 @@
+ASSIGNMENT 2 - ECE521 - INFERENCE ALGORITHMS AND MACHINE LEARNING
+DAVI EUGENIO NASCIMENTO FROSSARD - 1002812245
+
+To run all parts of the assingment just run digits.py, it will
+call all the functions and compile the report with the data
+produced. Note that it will overwrite the previous report. 
