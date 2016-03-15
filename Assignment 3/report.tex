@@ -1,0 +1,404 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Programming/Coding Assignment
+% LaTeX Template
+%
+% This template has been downloaded from:
+% http://www.latextemplates.com
+%
+% Original author:
+% Ted Pavlic (http://www.tedpavlic.com)
+%
+% Note:
+% The \lipsum[#] commands throughout this template generate dummy text
+% to fill the template out. These commands should all be removed when 
+% writing assignment content.
+%
+% This template uses a Perl script as an example snippet of code, most other
+% languages are also usable. Configure them in the "CODE INCLUSION 
+% CONFIGURATION" section.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass{article}
+
+\usepackage{fancyhdr} % Required for custom headers
+\usepackage{lastpage} % Required to determine the last page for the footer
+\usepackage{extramarks} % Required for headers and footers
+\usepackage[usenames,dvipsnames]{color} % Required for custom colors
+\usepackage{graphicx} % Required to insert images
+\usepackage{listings} % Required for insertion of code
+\usepackage{courier} % Required for the courier font
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
+\usepackage{pgfplotstable} % Import csv data
+\usepackage{amsmath} % Math equation tools
+\usepackage{hyperref} % Create references\pgfplotsset{compat=1.12}
+\usepackage{filecontents}% Used so that the external files can be placed in this file
+\usepackage{pgf} % Loops in latex
+\usepackage{bookmark}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{siunitx} % Formats the units and values
+
+% Setup siunitx:
+\sisetup{
+  round-mode          = places, % Rounds numbers
+  round-precision     = 4, % to 2 places
+}
+
+% Margins
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1} % Line spacing
+\renewcommand{\tableautorefname}{Table} % PS
+
+% Set up the header and footer
+\pagestyle{fancy}
+\chead{\hmwkClass\ (\hmwkClassTime): \hmwkTitle} % Top center head
+%\rhead{\firstxmark} % Top right header
+\lfoot{\lastxmark} % Bottom left footer
+\cfoot{} % Bottom center footer
+\rfoot{Page\ \thepage\ of\ \protect\pageref{LastPage}} % Bottom right footer
+\renewcommand\headrulewidth{0.4pt} % Size of the header rule
+\renewcommand\footrulewidth{0.4pt} % Size of the footer rule
+
+\renewcommand{\lstlistingname}{Code}
+
+\DeclareGraphicsExtensions{.eps,.pdf,.png,.jpg}
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs
+
+%----------------------------------------------------------------------------------------
+%	CODE INCLUSION CONFIGURATION
+%----------------------------------------------------------------------------------------
+
+\definecolor{MyDarkGreen}{rgb}{0.0,0.4,0.0} % This is the color used for comments
+\lstloadlanguages{Perl} % Load Perl syntax for listings, for a list of other languages supported see: ftp://ftp.tex.ac.uk/tex-archive/macros/latex/contrib/listings/listings.pdf
+\lstset{language=Perl, % Use Perl in this example
+        frame=single, % Single frame around code
+        basicstyle=\small\ttfamily, % Use small true type font
+        keywordstyle=[1]\color{Blue}\bf, % Perl functions bold and blue
+        keywordstyle=[2]\color{Purple}, % Perl function arguments purple
+        keywordstyle=[3]\color{Blue}\underbar, % Custom functions underlined and blue
+        identifierstyle=, % Nothing special about identifiers                                         
+        commentstyle=\usefont{T1}{pcr}{m}{sl}\color{MyDarkGreen}\small, % Comments small dark green courier font
+        stringstyle=\color{Purple}, % Strings are purple
+        showstringspaces=false, % Don't put marks in string spaces
+        tabsize=5, % 5 spaces per tab
+        %
+        % Put standard Perl functions not included in the default language here
+        morekeywords={rand},
+        %
+        % Put Perl function parameters here
+        morekeywords=[2]{on, off, interp},
+        %
+        % Put user defined functions here
+        morekeywords=[3]{test},
+       	%
+        morecomment=[l][\color{Blue}]{...}, % Line continuation (...) like blue comment
+        numbers=left, % Line numbers on left
+        firstnumber=1, % Line numbers start with line 1
+        numberstyle=\tiny\color{Blue}, % Line numbers are blue and small
+        stepnumber=5 % Line numbers go in steps of 5
+}
+
+% Creates a new command to include a perl script, the first parameter is the filename of the script (without .pl), the second parameter is the caption
+\newcommand{\perlscript}[2]{
+\begin{itemize}
+\item[]\lstinputlisting[caption=#2,label=#1]{#1.pl}
+\end{itemize}
+}
+
+%----------------------------------------------------------------------------------------
+%	DOCUMENT STRUCTURE COMMANDS
+%	Skip this unless you know what you're doing
+%----------------------------------------------------------------------------------------
+
+% Header and footer for when a page split occurs within a problem environment
+\newcommand{\enterProblemHeader}[1]{
+%\nobreak\extramarks{#1}{#1 continued on next page\ldots}\nobreak
+%\nobreak\extramarks{#1 (continued)}{#1 continued on next page\ldots}\nobreak
+}
+
+% Header and footer for when a page split occurs between problem environments
+\newcommand{\exitProblemHeader}[1]{
+%\nobreak\extramarks{#1 (continued)}{#1 continued on next page\ldots}\nobreak
+%\nobreak\extramarks{#1}{}\nobreak
+}
+
+\setcounter{secnumdepth}{0} % Removes default section numbers
+\newcounter{homeworkProblemCounter} % Creates a counter to keep track of the number of problems
+\setcounter{homeworkProblemCounter}{0}
+
+\newcommand{\homeworkProblemName}{}
+\newenvironment{homeworkProblem}[1][Task \arabic{homeworkProblemCounter}]{ % Makes a new environment called homeworkProblem which takes 1 argument (custom name) but the default is "Problem #"
+\def\sectionautorefname{Part}
+\refstepcounter{homeworkProblemCounter}%
+\renewcommand{\homeworkProblemName}{#1} % Assign \homeworkProblemName the name of the problem
+\section{\homeworkProblemName} % Make a section in the document with the custom problem count
+\enterProblemHeader{\homeworkProblemName} % Header and footer within the environment
+}{
+\exitProblemHeader{\homeworkProblemName} % Header and footer after the environment
+}
+
+\newcommand{\problemAnswer}[1]{ % Defines the problem answer command with the content as the only argument
+\noindent\framebox[\columnwidth][c]{\begin{minipage}{0.98\columnwidth}#1\end{minipage}} % Makes the box around the problem answer and puts the content inside
+}
+
+\newcommand{\homeworkSectionName}{}
+\newenvironment{homeworkSection}[1]{ % New environment for sections within homework problems, takes 1 argument - the name of the section
+\renewcommand{\homeworkSectionName}{#1} % Assign \homeworkSectionName to the name of the section from the environment argument
+\subsection{\homeworkSectionName} % Make a subsection with the custom name of the subsection
+\enterProblemHeader{\homeworkProblemName\ [\homeworkSectionName]} % Header and footer within the environment
+}{
+\enterProblemHeader{\homeworkProblemName} % Header and footer after the environment
+}
+
+%----------------------------------------------------------------------------------------
+%	NAME AND CLASS SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\hmwkTitle}{Assignment 2} % Assignment title
+\newcommand{\hmwkDueDate}{Wednesday,\ February\ 17,\ 2016} % Due date
+\newcommand{\hmwkClass}{ECE521} % Course/class
+\newcommand{\hmwkClassTime}{L0101} % Class/lecture time
+\newcommand{\hmwkAuthorName}{Davi Frossard} % Your name
+
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\title{
+\vspace{2in}
+\textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+\normalsize\vspace{0.1in}\small{Due\ on\ \hmwkDueDate}\\
+\vspace{0.1in}
+\vspace{3in}
+}
+
+\author{\textbf{Davi Frossard} \\ \textbf{Erich Sato} \\ \textbf{Mauro Brito}}
+%\date{} % Insert date here if you want it to appear below your name
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle
+\clearpage
+
+
+%----------------------------------------------------------------------------------------
+%	PART 1
+%----------------------------------------------------------------------------------------
+
+\begin{homeworkProblem}
+\label{part1}
+
+
+%TODO
+
+\clearpage
+\end{homeworkProblem}
+%----------------------------------------------------------------------------------------
+
+
+%----------------------------------------------------------------------------------------
+%	PART 2
+%----------------------------------------------------------------------------------------
+
+\begin{homeworkProblem}
+	\label{part2}
+	
+We implement the pairwise squared distance discussed in \autoref{part1} using Python and TensorFlow with the code listed in \autoref{lst:task2}.
+
+\lstinputlisting[language=Python,
+caption=Implementation of Pairwise Distance.,
+label={lst:task2}]{distance_functions.py}
+
+\clearpage
+\end{homeworkProblem}
+%----------------------------------------------------------------------------------------
+
+
+%----------------------------------------------------------------------------------------
+%	PART 3
+%----------------------------------------------------------------------------------------
+
+\begin{homeworkProblem}
+	\label{part3}
+
+If we randomly initialize a dataset with 1000 points drawn from a normal distribution and 
+evaluate the cost of \textit{K}-Means with two cluster assuming one of a hundred points between -5 and 5, we get the cost function shown in \autoref{fig:k_means_cost}. From which we can see that the cost function is not convex.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\columnwidth]{results/cost_function.pdf}
+	\caption{\textit{K}-Means Cost Plot}
+	\label{fig:k_means_cost}
+\end{figure}
+
+We can generalize the argument following a simple argument for its non convexity: If we have any set of data $X$ and cluster it into two optimal clusters $K_1$ with center $C_1$ and $K_2$ with center $C_2$, there is at least one other assignment that gives the same cost, it is $K_1$ with center $C_2$ and $K_2$ with center $C_1$. In fact, for higher numbers of clusters, any permutation of the centers will give the same cost.
+
+
+\clearpage
+\end{homeworkProblem}
+%----------------------------------------------------------------------------------------
+
+
+%----------------------------------------------------------------------------------------
+%	PART 4
+%----------------------------------------------------------------------------------------
+
+\begin{homeworkProblem}
+	\label{part4}
+
+If we cluster the data provided in \textit{data2D.npy} using \textit{K}-Means with \textit{K} = 3, we get the assignments shown in \autoref{fig:3_means}. With the training curve shown in \autoref{fig:3_means_cost}.
+
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\columnwidth]{results/3_means.pdf}
+	\caption{\textit{K}-Means Cluster with \textit{K} = 3}
+	\label{fig:3_means}
+\end{figure}
+
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\columnwidth]{results/cost_3_means.pdf}
+	\caption{Training Curve}
+	\label{fig:3_means_cost}
+\end{figure}
+
+\clearpage
+\end{homeworkProblem}
+%----------------------------------------------------------------------------------------
+
+
+%----------------------------------------------------------------------------------------
+%	PART 5
+%----------------------------------------------------------------------------------------
+
+\begin{homeworkProblem}
+	\label{part5}
+	
+Swiping the values of \textit{K} from 1 to 5, we get the clusterizations depicted in \autoref{fig:k_means}, with the percentages of data assigned to each cluster listed in \autoref{tab:task6}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=.8\columnwidth]{results/k_means.pdf}
+	\caption{\textit{K}-Means Clusterizations}
+	\label{fig:k_means}
+\end{figure}
+
+\begin{table}[H]
+	\centering
+	\pgfplotstabletypeset[
+	col sep=comma,
+	string type,
+	display columns/0/.style={column name=\textbf{K}, column type={|c|}},
+	display columns/1/.style={column name=\textbf{1}, column type={c|}},
+	display columns/2/.style={column name=\textbf{2}, column type={c|}},
+	display columns/3/.style={column name=\textbf{3}, column type={c|}},
+	display columns/4/.style={column name=\textbf{4}, column type={c|}},
+	display columns/5/.style={column name=\textbf{5}, column type={c|}},
+	every head row/.style={before row=\cline{2-6} \multicolumn{1}{c|}{} & \multicolumn{5}{c|}{\textbf{Percentage of Data in Cluster}}\\\hline,after row=\hline},
+	every last row/.style={after row=\hline},
+	]{results/cluster_percentages.csv}
+	\caption{Cluster Percentages.}
+	\label{tab:task6}
+\end{table}
+
+Looking at table \autoref{tab:task6}, we notice that increasing \textit{K} up to 3 keeps the percentage of data in each cluster balanced. However, from \textit{K} = 4 onwards we notice that some clusters are accumulating more data than others. From this perspective we conclude that \textit{K} = 3 is the best parameter.
+\clearpage
+\end{homeworkProblem}
+%----------------------------------------------------------------------------------------
+
+
+
+%----------------------------------------------------------------------------------------
+%	PART 6
+%----------------------------------------------------------------------------------------
+
+\begin{homeworkProblem}
+	\label{part6}
+
+Following an approach different of that from \autoref{part5}, we now separate a portion of the dataset for validation and calculate its loss for each value of \textit{K}. We obtain \autoref{tab:task7}
+
+\begin{table}[H]
+	\centering
+	\pgfplotstabletypeset[
+	col sep=comma,
+	string type,
+	display columns/0/.style={column name=\textbf{K}, column type={|c|}},
+	display columns/1/.style={column name=\textbf{Validation Cost}, column type={c|}},
+	every head row/.style={before row=\hline,after row=\hline},
+	every last row/.style={after row=\hline},
+	]{results/cluster_costs.csv}
+	\caption{Validation costs for each value of \textit{K}.}
+	\label{tab:task7}
+\end{table}	
+
+We notice that the validation cost is monotonically decreasing, so we expect that the larger the \textit{K}, the smaller the cost. However, differently from supervised learning, we are not concerned with the cost itself, but rather with the rate of change. We notice that the factors of reduction in the validation cost decrease exponentially (i.e: 4, 2, ..., 1), with the "elbow" of the curve at \textit{K} = 3, reinforcing our beliefs from \autoref{part5}.
+
+\clearpage
+\end{homeworkProblem}
+%----------------------------------------------------------------------------------------
+
+
+%----------------------------------------------------------------------------------------
+%	PART 7
+%----------------------------------------------------------------------------------------
+
+\begin{homeworkProblem}
+\label{part7}
+
+We want to derive the expression for $P(z|\boldsymbol{x})$ in terms of the mixture of Gaussians parameters $\{\boldsymbol{\mu}_k, \sigma_k, \pi_k\}$:
+
+\begin{equation}
+\label{eq:latent_mog1}
+\begin{aligned}
+P(z=k|\boldsymbol{x})
+& = \frac{P(\boldsymbol{x}, z=k)}{\sum_{z'=1}^{K}P(\boldsymbol{x}|z')}\\
+& = \frac{P(\boldsymbol{x}|z=k)P(z=k)}{\sum_{z'=1}^{K}P(\boldsymbol{x}|z')}\\
+\end{aligned}
+\end{equation}
+
+We now substitute $P(z=k)$ for the parameter $\pi_k$ and extend the Gaussian distributions in terms of the parameters $\boldsymbol{\mu}_k$ and $\sigma_k$.
+
+\begin{equation}
+\label{eq:latent_mog2}
+\begin{aligned}
+P(z=k|\boldsymbol{x})
+& = \prod_{j=1}^{N} \dfrac{\pi_k \dfrac{1}{\sqrt{2\pi}\sigma_k}exp\left(-\frac{(x_j-\mu_k)^2}{2\sigma_{k}^{2}}\right)}
+{\sum_{l=1}^{K} \dfrac{1}{\sqrt{2\pi}\sigma_l}exp\left(-\frac{(x_j-\mu_l)^2}{2\sigma_{l}^{2}}\right)}
+\end{aligned}
+\end{equation}
+
+\clearpage
+\end{homeworkProblem}
+%----------------------------------------------------------------------------------------
+
+
+%----------------------------------------------------------------------------------------
+%	PART 8
+%----------------------------------------------------------------------------------------
+
+\begin{homeworkProblem}
+	\label{part8}
+	
+If we now take the logarithm of the equation defined in \autoref{eq:latent_mog2}, we get:
+
+	\clearpage
+\end{homeworkProblem}
+%----------------------------------------------------------------------------------------
+
+\end{document}
