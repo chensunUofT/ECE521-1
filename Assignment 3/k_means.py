@@ -42,8 +42,7 @@ def plot_data(dataset, clusters, classes):
     plt.title('K-Means Clustering')
     plt.xlabel('X1')
     plt.ylabel('X2')
-    plt.savefig('results/%d_means.pdf' % k)
-    plt.close()
+    plt.grid()
 
 
 def loss_function(mu, data):
