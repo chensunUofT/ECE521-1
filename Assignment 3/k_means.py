@@ -61,7 +61,7 @@ def loss_function(mu, data):
     '''
     dists = square_distance(mu, data)  # ||x - mu||
     min_dist = tf.reduce_min(dists, 1)  # min ||x - mu||
-    cost = tf.reduce_sum(min_dist)  # sum(min ||x - mu||)
+    cost = tf.reduce_mean(min_dist)  # sum(min ||x - mu||)
     return cost
 
 

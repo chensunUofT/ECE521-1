@@ -1,5 +1,10 @@
 import tensorflow as tf
 
+
+
+
+
+
 def matrix_norm_column(x):
     '''
     Calculates the norm of each vector in a matrix, returning a column matrix

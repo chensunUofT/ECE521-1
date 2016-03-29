@@ -34,7 +34,7 @@
 \usepackage{courier} % Required for the courier font
 \usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
 \usepackage{pgfplotstable} % Import csv data
-\usepackage{amsmath} % Math equation tools
+\usepackage{amsmath,amssymb} % Math equation tools
 \usepackage{hyperref} % Create references\pgfplotsset{compat=1.12}
 \usepackage{filecontents}% Used so that the external files can be placed in this file
 \usepackage{pgf} % Loops in latex
@@ -42,6 +42,11 @@
 \usepackage{booktabs}
 \usepackage{float}
 \usepackage{siunitx} % Formats the units and values
+\usepackage{parskip}
+\usepackage{chngcntr}
+\usepackage{cleveref}
+
+\setlength{\parskip}{10pt} % 1ex plus 0.5ex minus 0.2ex}
 
 % Setup siunitx:
 \sisetup{
@@ -59,6 +64,7 @@
 
 \linespread{1.1} % Line spacing
 \renewcommand{\tableautorefname}{Table} % PS
+\renewcommand{\equationautorefname}{Eq.} % PS
 
 % Set up the header and footer
 \pagestyle{fancy}
@@ -136,10 +142,9 @@
 
 \setcounter{secnumdepth}{0} % Removes default section numbers
 \newcounter{homeworkProblemCounter} % Creates a counter to keep track of the number of problems
-\setcounter{homeworkProblemCounter}{0}
 
 \newcommand{\homeworkProblemName}{}
-\newenvironment{homeworkProblem}[1][Task \arabic{homeworkProblemCounter}]{ % Makes a new environment called homeworkProblem which takes 1 argument (custom name) but the default is "Problem #"
+\newenvironment{homeworkProblem}[1][Part \arabic{homeworkProblemCounter}]{ % Makes a new environment called homeworkProblem which takes 1 argument (custom name) but the default is "Problem #"
 \def\sectionautorefname{Part}
 \refstepcounter{homeworkProblemCounter}%
 \renewcommand{\homeworkProblemName}{#1} % Assign \homeworkProblemName the name of the problem
@@ -166,8 +171,8 @@
 %	NAME AND CLASS SECTION
 %----------------------------------------------------------------------------------------
 
-\newcommand{\hmwkTitle}{Assignment 2} % Assignment title
-\newcommand{\hmwkDueDate}{Wednesday,\ February\ 17,\ 2016} % Due date
+\newcommand{\hmwkTitle}{Assignment 3} % Assignment title
+\newcommand{\hmwkDueDate}{Tuesday,\ March\ 29,\ 2016} % Due date
 \newcommand{\hmwkClass}{ECE521} % Course/class
 \newcommand{\hmwkClassTime}{L0101} % Class/lecture time
 \newcommand{\hmwkAuthorName}{Davi Frossard} % Your name
@@ -199,11 +204,34 @@
 %	PART 1
 %----------------------------------------------------------------------------------------
 
+\begin{center}
+\section{K-Means}
+\end{center}
+
 \begin{homeworkProblem}
-\label{part1}
+\label{kmeans1}
 
+We want an efficient, vectorized function of the pairwise distance between two matrices $\boldsymbol{X}$ and $\boldsymbol{Y}$. To do so, let us first look at the case of a single entry.
 
-%TODO
+\begin{equation}
+\label{eq:dist}
+\begin{aligned}
+d(x_i, y_i)^2 & = ||x_i-y_i||^2\\
+& = ||x_i||^2 + ||y_i||^2 - 2(x_i \cdot y_i^T)
+\end{aligned}
+\end{equation}
+
+We can extend the function to the entire matrix with the concept of outer (element-wise) sum, for which we use the notation of $\dotplus$. Therefore we extend \autoref{eq:dist}.
+
+\begin{equation}
+\label{eq:dist2}
+\begin{aligned}
+d(X, Y)^2 & = ||X-Y||^2\\
+& = ||X||^2 \dotplus ||Y||^2 - 2(X \cdot Y^T)
+\end{aligned}
+\end{equation}
+
+With \autoref{eq:dist2} and given matrices $\boldsymbol{X}$ with dimensions \textit{MxN} and $\boldsymbol{Y}$ with dimensions \textit{KxN}, we obtain a matrix $\boldsymbol{D}$ with dimensions \textit{MxK} containing the pair-wise distance between the entries in $\boldsymbol{X}$ and $\boldsymbol{Y}$.
 
 \clearpage
 \end{homeworkProblem}
@@ -215,12 +243,13 @@
 %----------------------------------------------------------------------------------------
 
 \begin{homeworkProblem}
-	\label{part2}
+	\label{kmeans2}
 	
-We implement the pairwise squared distance discussed in \autoref{part1} using Python and TensorFlow with the code listed in \autoref{lst:task2}.
+We implement the pairwise squared distance discussed in \autoref{kmeans1} using Python and TensorFlow with the code listed in \autoref{lst:task2}. To implement element-wise sum we use TensorFlow's broadcasting by operating with  transpose of $||X||^2$ and $||Y||^2$, effectively computing the outer sum.
 
 \lstinputlisting[language=Python,
 caption=Implementation of Pairwise Distance.,
+linerange={8-32},
 label={lst:task2}]{distance_functions.py}
 
 \clearpage
@@ -233,7 +262,7 @@ label={lst:task2}]{distance_functions.py}
 %----------------------------------------------------------------------------------------
 
 \begin{homeworkProblem}
-	\label{part3}
+	\label{kmeans3}
 
 If we randomly initialize a dataset with 1000 points drawn from a normal distribution and 
 evaluate the cost of \textit{K}-Means with two cluster assuming one of a hundred points between -5 and 5, we get the cost function shown in \autoref{fig:k_means_cost}. From which we can see that the cost function is not convex.
@@ -258,7 +287,7 @@ We can generalize the argument following a simple argument for its non convexity
 %----------------------------------------------------------------------------------------
 
 \begin{homeworkProblem}
-	\label{part4}
+	\label{kmeans4}
 
 If we cluster the data provided in \textit{data2D.npy} using \textit{K}-Means with \textit{K} = 3, we get the assignments shown in \autoref{fig:3_means}. With the training curve shown in \autoref{fig:3_means_cost}.
 
@@ -288,13 +317,13 @@ If we cluster the data provided in \textit{data2D.npy} using \textit{K}-Means wi
 %----------------------------------------------------------------------------------------
 
 \begin{homeworkProblem}
-	\label{part5}
+	\label{kmeans5}
 	
 Swiping the values of \textit{K} from 1 to 5, we get the clusterizations depicted in \autoref{fig:k_means}, with the percentages of data assigned to each cluster listed in \autoref{tab:task6}.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=.8\columnwidth]{results/k_means.pdf}
+	\includegraphics[width=.78\columnwidth]{results/k_means.pdf}
 	\caption{\textit{K}-Means Clusterizations}
 	\label{fig:k_means}
 \end{figure}
@@ -329,9 +358,9 @@ Looking at table \autoref{tab:task6}, we notice that increasing \textit{K} up to
 %----------------------------------------------------------------------------------------
 
 \begin{homeworkProblem}
-	\label{part6}
+	\label{kmeans6}
 
-Following an approach different of that from \autoref{part5}, we now separate a portion of the dataset for validation and calculate its loss for each value of \textit{K}. We obtain \autoref{tab:task7}
+Following an approach different of that from \autoref{kmeans5}, we now separate a portion of the dataset for validation and calculate its loss for each value of \textit{K}. We obtain \autoref{tab:task7}
 
 \begin{table}[H]
 	\centering
@@ -347,19 +376,31 @@ Following an approach different of that from \autoref{part5}, we now separate a 
 	\label{tab:task7}
 \end{table}	
 
-We notice that the validation cost is monotonically decreasing, so we expect that the larger the \textit{K}, the smaller the cost. However, differently from supervised learning, we are not concerned with the cost itself, but rather with the rate of change. We notice that the factors of reduction in the validation cost decrease exponentially (i.e: 4, 2, ..., 1), with the "elbow" of the curve at \textit{K} = 3, reinforcing our beliefs from \autoref{part5}.
+We notice that the validation cost is monotonically decreasing, so we expect that the larger the \textit{K}, the smaller the cost. However, differently from supervised learning, we are not concerned with the cost itself, but rather with the rate of change. We notice that the factors of reduction in the validation cost decrease exponentially with the "elbow" of the curve at \textit{K} = 3, as can also be seen in \autoref{fig:k_means_sweep}, which reinforces our beliefs from \autoref{kmeans5}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=.78\columnwidth]{results/kmeans_2d_ksweep.pdf}
+	\caption{\textit{K}-Means Clusterizations}
+	\label{fig:k_means_sweep}
+\end{figure}
 
 \clearpage
 \end{homeworkProblem}
 %----------------------------------------------------------------------------------------
 
+\begin{center}
+	\section{Mixture of Gaussians}
+\end{center}
+\setcounter{homeworkProblemCounter}{0}
 
 %----------------------------------------------------------------------------------------
-%	PART 7
+%	PART 1
 %----------------------------------------------------------------------------------------
+
 
 \begin{homeworkProblem}
-\label{part7}
+\label{mog1}
 
 We want to derive the expression for $P(z|\boldsymbol{x})$ in terms of the mixture of Gaussians parameters $\{\boldsymbol{\mu}_k, \sigma_k, \pi_k\}$:
 
@@ -372,7 +413,7 @@ P(z=k|\boldsymbol{x})
 \end{aligned}
 \end{equation}
 
-We now substitute $P(z=k)$ for the parameter $\pi_k$ and extend the Gaussian distributions in terms of the parameters $\boldsymbol{\mu}_k$ and $\sigma_k$.
+We substitute $P(z=k)$ for the parameter $\pi_k$ and extend the Gaussian distributions in terms of the parameters $\boldsymbol{\mu}_k$ and $\sigma_k$, thus obtaining \autoref{eq:latent_mog2}.
 
 \begin{equation}
 \label{eq:latent_mog2}
@@ -389,15 +430,324 @@ P(z=k|\boldsymbol{x})
 
 
 %----------------------------------------------------------------------------------------
-%	PART 8
+%	PART 2
 %----------------------------------------------------------------------------------------
 
 \begin{homeworkProblem}
-	\label{part8}
-	
-If we now take the logarithm of the equation defined in \autoref{eq:latent_mog2}, we get:
+	\label{mog2}
 
+Given cluster parameters $\boldsymbol{\mu_k}, \sigma_k^2$ we can find $log \mathcal{N}(\boldsymbol{x}| \boldsymbol{\mu_k}, \sigma_k^2)$ with \autoref{pxgz}
+
+\begin{equation}
+\label{pxgz}
+\begin{aligned}
+\mathcal{N}(x| \mu_k, \sigma_k^2)) & = P(x |\mu_k, \sigma_k^2)\\
+log \mathcal{N}(x| \mu_k, \sigma_k^2)) & = log P(x |\mu_k, \sigma_k^2)\\
+& = log \left( \frac{1}{\sqrt{2\pi}\sigma_k} exp\left(\frac{-(x-\mu_k)^2}{2\sigma_k^2}\right) \right)\\
+& = log \frac{1}{\sqrt{2\pi}\sigma_k} + \left(\frac{-(x-\mu_k)^2}{2\sigma_k^2}\right)
+\end{aligned}
+\end{equation}
+
+Moreover, we can expand the pairwise distance in the second term using our method from \autoref{kmeans1}, we do so in \autoref{pxgz2}.
+
+\begin{equation}
+\label{pxgz2}
+\begin{aligned}
+log \mathcal{N}(\boldsymbol{x}| \boldsymbol{\mu_k}, \sigma_k^2)) & = log \frac{1}{\sqrt{2\pi}\sigma_k} + \left(\frac{-(||x||^2 .+ ||\mu_k||^2 - 2 \mu_k \cdot x^T)}{2\sigma_k^2}\right)
+\end{aligned}
+\end{equation}
+
+Our implementation of the equation derived in \autoref{pxgz2} is shown in \autoref{lst:task8}.
+
+\lstinputlisting[language=Python,
+caption=Implementation of Log Probability Density.,
+linerange={10-29},
+label={lst:task8}]{"mixture_of_gaussians.py"}
+
+\clearpage
+\end{homeworkProblem}
+%----------------------------------------------------------------------------------------
+
+
+%----------------------------------------------------------------------------------------
+%	PART 3
+%----------------------------------------------------------------------------------------
+
+\begin{homeworkProblem}
+	\label{mog3}
+	
+We now want to invert the probability found in \autoref{mog2}: Given the data points and cluster means and standard deviations, find the probability of each cluster, i.e. $P(z|x)$.
+
+\begin{equation}
+\label{logpzkx}
+\begin{aligned}
+P(z=k|x) & = \frac{P(x | z=k) P(z=k)}{P(x)}\\
+& = \frac{P(x | z=k) P(z=k)}{\sum_{k'} P(x | z=k') P(z=k')}
+\end{aligned}
+\end{equation}
+
+From \autoref{mog2}, we have $logP(x|z=k)$, therefore we substitute in \autoref{logpzkx}.
+
+\begin{equation}
+\label{logpzkx2}
+\begin{aligned}
+log P(z=k|x) & = log P(x | z=k) + log P(z=k) - log\sum_{k'}exp\left[logP(x | z=k') +logP(z=k')\right]\\
+\end{aligned}
+\end{equation}
+
+We implement \autoref{logpzkx2} (also generalizing for more than one training point) with \autoref{lst:mog3}. 
+
+\lstinputlisting[language=Python,
+caption=Implementation of Log Posterior Cluster Probability.,
+linerange={31-52},
+label={lst:mog3}]{"mixture_of_gaussians.py"}
+
+\clearpage
+\end{homeworkProblem}
+%----------------------------------------------------------------------------------------
+
+
+%----------------------------------------------------------------------------------------
+%	PART 4
+%----------------------------------------------------------------------------------------
+
+\begin{homeworkProblem}
+	\label{mog4}
+	We want to show that $\nabla log P(x) = \sum_k P(z=k | x) \nabla log P(x, z=k)$. Let us first calculate $log P(x, z=k)$ with \autoref{pxzk}.
+	
+	\begin{equation}
+	\label{pxzk}
+	\begin{aligned}
+	P(x, z=k) & = P(z=k) P(x | z=k)\\
+	log P(x, z=k) & = log P(z=k) + log P(x | z=k)\\
+	& = log \pi_k + log \mathcal{N}(x | \mu_k, \sigma_k)\\
+	& = log \pi_k + log \frac{1}{\sqrt{2\pi}\sigma_k} exp\left(\frac{-(x-\mu_k)^2}{2\sigma_k^2}\right)\\
+	& = log \pi_k + log \frac{1}{\sqrt{2\pi}\sigma_k} + \left(\frac{-(x-\mu_k)^2}{2\sigma_k^2}\right)
+	\end{aligned}
+	\end{equation}
+	
+	We now calculate $P(x)$ with \autoref{px}.
+	
+	\begin{equation}
+	\label{px}
+	\begin{aligned}
+	P(x) & = \sum_k \pi_k \mathcal{N}(x | \mu_k, \sigma_k)\\
+	log P(x) & = log \sum_k \pi_k \frac{1}{\sqrt{2\pi}\sigma_k} exp\left(\frac{-(x-\mu_k)^2}{2\sigma_k^2}\right)
+	\end{aligned}
+	\end{equation}
+	
+	We can now find $P(z=k|x)$ with \autoref{pzkx}.
+	
+	\begin{equation}
+	\label{pzkx}
+	\begin{aligned}
+	P(z=k|x) & = \frac{P(x | z=k) P(z=k)}{P(x)}\\
+	& = \dfrac{\pi_k \frac{1}{\sqrt{2\pi}\sigma_k} exp\left(\frac{-(x-\mu_k)^2}{2\sigma_k^2}\right)}
+	{\sum_l \pi_l \frac{1}{\sqrt{2\pi}\sigma_l} exp\left(\frac{-(x-\mu_l)^2}{2\sigma_l^2}\right)}
+	\end{aligned}
+	\end{equation}
+	
+	Now we calculate the derivative of \autoref{pxzk} with respect to $\mu_k$ with \autoref{gradpxzk}.
+	
+	\begin{equation}
+	\label{gradpxzk}
+	\begin{aligned}
+	\nabla log P(x, z=k) & = \frac{\partial}{\partial \mu_k} \left( \frac{-(x-\mu_k)^2}{2\sigma_k^2} \right)\\
+	& = \frac{1}{2\sigma_k^2} \frac{\partial}{\partial \mu_k} \left( (x-\mu_k)^2 \right)\\
+	& = \frac{2}{2\sigma_k^2} (x-\mu_k)\\
+	& = \frac{x-\mu_k}{\sigma_k^2}
+	\end{aligned}
+	\end{equation}
+		
+	We also find the derivative of \autoref{px} with respect to x with \autoref{gradpx}
+	
+	\begin{equation}
+	\label{gradpx}
+	\begin{aligned}
+	\nabla log P(x) & = \frac{\partial}{\partial \mu_k} \left( log \sum_k \pi_k \frac{1}{\sqrt{2\pi}\sigma_k} exp\left(\frac{-(x-\mu_k)^2}{2\sigma_k^2}\right) \right)\\
+	& = \dfrac{1}{\sum_k \pi_k \frac{1}{\sqrt{2\pi}\sigma_k} exp\left(\frac{-(x-\mu_k)^2}{2\sigma_k^2}\right)} \frac{\partial}{\partial \mu_k} \left( \sum_k \pi_k \frac{1}{\sqrt{2\pi}\sigma_k} exp\left(\frac{-(x-\mu_k)^2}{2\sigma_k^2}\right) \right)\\
+	& = \dfrac{1}{\sum_k \pi_k \frac{1}{\sqrt{2\pi}\sigma_k} exp\left(\frac{-(x-\mu_k)^2}{2\sigma_k^2}\right)} \left( \sum_k \pi_k \frac{1}{\sqrt{2\pi}\sigma_k} \frac{\partial}{\partial \mu_k} exp\left(\frac{-(x-\mu_k)^2}{2\sigma_k^2}\right) \right)\\
+	& = \dfrac{1}{\sum_k \pi_k \frac{1}{\sqrt{2\pi}\sigma_k} exp\left(\frac{-(x-\mu_k)^2}{2\sigma_k^2}\right)} \left( \sum_k \pi_k \frac{1}{\sqrt{2\pi}\sigma_k} exp\left(\frac{-(x-\mu_k)^2}{2\sigma_k^2}\right) \left( \frac{x-\mu_k}{\sigma_k^2}\right)  \right)\\
+	& = \sum_k \dfrac{\pi_k \frac{1}{\sqrt{2\pi}\sigma_k} exp\left(\frac{-(x-\mu_k)^2}{2\sigma_k^2}\right)}{\sum_k \pi_k \frac{1}{\sqrt{2\pi}\sigma_k} exp\left(\frac{-(x-\mu_k)^2}{2\sigma_k^2}\right)} \left( \frac{x-\mu_k}{\sigma_k^2}\right)\\
+	& = \sum_k P(z=k|x) \nabla log P(x, z=k)
+	\end{aligned}
+	\end{equation}
+	
 	\clearpage
+\end{homeworkProblem}
+%----------------------------------------------------------------------------------------
+
+
+
+%----------------------------------------------------------------------------------------
+%	PART 5
+%----------------------------------------------------------------------------------------
+
+\begin{homeworkProblem}
+\label{mog5}
+In order to run gradient descent we need to determine an appropriate cost function, in this case we will be using the marginal data likelihood, or $P(X)$. To implement it we use the results found in the previous section with the steps shown in \autoref{pxm}.
+
+\begin{equation}
+	\label{pxm}
+	\begin{aligned}
+		P(x) & = \prod_n \sum_k P(z_n=k)P(x_n|z_n)\\
+		& = \prod_n \sum_k P(z_n=k)exp\left(logP(x_n|z_n)\right)\\
+		& = \prod_n \sum_k exp\left(logP(z_n=k)+logP(x_n|z_n)\right)\\
+		logP(x) &= \sum_n log\left[\sum_k exp\left(logP(z_n=k)+logP(x_n|z_n)\right)\right]\\
+	\end{aligned}
+\end{equation}
+
+With the functions previously implemented in Tasks \ref{mog2} and \ref{mog3}, we can easily code this cost function with 
+
+\lstinputlisting[language=Python,
+caption=Implementation of the Marginal Log Probability.,
+linerange={53-69},
+label={lst:mog5}]{"mixture_of_gaussians.py"}
+
+We also need reasonable initial values for the parameters and a way to enforce their constraints: $\sum_k P(z_k)=1$ which we enforce using a softmax function; $\sigma \in [0, \infty)$ which we guarantee with $\sigma^2 = exp(\sigma)$. The code for the initializations and constraints is listed in \autoref{lst:mog52}.
+
+\lstinputlisting[language=Python,
+caption=Parameter Initialization and Constraint Enforcement.,
+linerange={87-93},
+label={lst:mog52}]{"mixture_of_gaussians.py"}
+
+With these parameters we train a Mixture of Gaussians on the same dataset used in Parts \ref{kmeans4}-\ref{kmeans6} and obtain the results shown in \autoref{fig:mog_model} and \autoref{tab:mog_model} with training curve shown in \autoref{fig:mog_model_curve}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=.78\columnwidth]{results/mog_2d.pdf}
+	\caption{Mixture of Gaussians Model}
+	\label{fig:mog_model}
+\end{figure}
+
+\begin{table}[H]
+	\centering
+	\pgfplotstabletypeset[
+	header=false,
+	col sep=semicolon,
+	string type,
+	display columns/0/.style={column name=\textbf{Cluster}, column type={|c|}},
+	display columns/1/.style={column name=\textbf{Probability}, column type={c|}},
+	display columns/2/.style={column name=\textbf{Mean}, column type={c|}},
+	display columns/3/.style={column name=\textbf{Standard Deviation}, column type={c|}},
+	every head row/.style={before row=\hline,after row=\hline},
+	every last row/.style={after row=\hline},
+	create on use/newcol/.style={
+		create col/set list={1,2,3}
+	},
+	columns/newcol/.style={string type},
+	columns={newcol,0,1,2},
+	]{results/mog_2d_parameters.csv}
+	\caption{Evaluation of the model on test set.}
+	\label{tab:mog_model}
+\end{table}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=.78\columnwidth]{results/mog_2d_train.pdf}
+	\caption{Mixture of Gaussians Model Training Curve}
+	\label{fig:mog_model_curve}
+\end{figure}
+
+\clearpage
+\end{homeworkProblem}
+%----------------------------------------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------------------------------------
+%	PART 6
+%----------------------------------------------------------------------------------------
+
+\begin{homeworkProblem}
+\label{mog6}
+
+In a process similar to the one performed in Parts \ref{kmeans5}-\ref{kmeans6}, we train Mixture of Gaussian models with the number of clusters varying from 1 to 5. In doing so we obtain the models depicted in \autoref{fig:mog_models}. The hard assignments inferred from the colors may be misleading as it does not represent the different responsibility levels of each cluster.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=.75\columnwidth]{results/mogs.pdf}
+	\caption{Mixture of Gaussians Models}
+	\label{fig:mog_models}
+\end{figure}
+
+For each model we obtain the log-likelihood in the test set listed in \autoref{tab:mog_models} (and also plotted in \autoref{fig:mog_models_plot}). From the data it is clear that \textit{K} = 3 is the optimal choice of clusters since the log-likelihood plateaus after this value.
+
+\begin{table}[H]
+	\centering
+	\pgfplotstabletypeset[
+	header=false,
+	col sep=comma,
+	string type,
+	display columns/0/.style={column name=\textbf{Clusters}, column type={|c|}},
+	display columns/1/.style={column name=\textbf{Log Likelihood}, column type={c|}},
+	every head row/.style={before row=\hline,after row=\hline},
+	every last row/.style={after row=\hline},
+	]{results/mog_costs.csv}
+	\caption{Log Likelihood of Each Model on Test Set.}
+	\label{tab:mog_models}
+\end{table}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=.75\columnwidth]{results/mog_2d_ksweep.pdf}
+	\caption{Mixture of Gaussians Models}
+	\label{fig:mog_models_plot}
+\end{figure}
+
+
+\clearpage
+\end{homeworkProblem}
+%----------------------------------------------------------------------------------------
+
+
+
+%----------------------------------------------------------------------------------------
+%	PART 7
+%----------------------------------------------------------------------------------------
+
+\begin{homeworkProblem}
+\label{mog7}
+
+With a 100-dimensional data we can no longer visualize scatter plots to decide the number of clusters, therefore we must rely on the cost functions established. For the Mixture of Gaussians we use log-likelihood and for K-Means we use squared error. Swiping the number of clusters from 1 to 9, we obtain the values listed in \autoref{tab:models_100d}.
+
+\begin{table}[H]
+	\centering
+	\pgfplotstabletypeset[
+	header=false,
+	col sep=comma,
+	string type,
+	display columns/0/.style={column name=\textbf{Clusters}, column type={|c|}},
+	display columns/1/.style={column name=\textbf{MoG Log Likelihood}, column type={c|}},
+	display columns/2/.style={column name=\textbf{KMeans Squared Error}, column type={c|}},
+	every head row/.style={before row=\hline,after row=\hline},
+	every last row/.style={after row=\hline},
+	]{results/costs100d.csv}
+	\caption{Log Likelihood of Each Model on Test Set.}
+	\label{tab:models_100d}
+\end{table}
+
+Plotting the log-likelihood of the Mixture of Gaussians models we get the picture depicted in \autoref{fig:mog_models_100d} from which we can notice that the value plateaus after \textit{K} = 5, so we conclude that this is a reasonable amount of clusters in the dataset.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=.75\columnwidth]{results/mog_100d.pdf}
+	\caption{Mixture of Gaussians Models}
+	\label{fig:mog_models_100d}
+\end{figure}
+
+Now plotting the K-Means error we get \autoref{fig:kmeans_models_100d}, from which we notice that K-Means improves very little from \textit{K} = 4 to 6. Therefore to some extent both K-Means and Mixture of Gaussians produce best results with \textit{K} = 5. However, we notice that K-Means does not behave as well with high dimensional data as MoG did or how K-Means did with the 2-dimensional dataset, as can be noticed by the oscillating error values towards the higher number of clusters, suggesting low minima.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=.75\columnwidth]{results/k_means_100d.pdf}
+	\caption{Mixture of Gaussians Models}
+	\label{fig:kmeans_models_100d}
+\end{figure}
+
+
+\clearpage
 \end{homeworkProblem}
 %----------------------------------------------------------------------------------------
 
