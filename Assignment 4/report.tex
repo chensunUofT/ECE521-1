@@ -1,0 +1,391 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Programming/Coding Assignment
+% LaTeX Template
+%
+% This template has been downloaded from:
+% http://www.latextemplates.com
+%
+% Original author:
+% Ted Pavlic (http://www.tedpavlic.com)
+%
+% Note:
+% The \lipsum[#] commands throughout this template generate dummy text
+% to fill the template out. These commands should all be removed when 
+% writing assignment content.
+%
+% This template uses a Perl script as an example snippet of code, most other
+% languages are also usable. Configure them in the "CODE INCLUSION 
+% CONFIGURATION" section.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass{article}
+
+\usepackage{fancyhdr} % Required for custom headers
+\usepackage{lastpage} % Required to determine the last page for the footer
+\usepackage{extramarks} % Required for headers and footers
+\usepackage[usenames,dvipsnames]{color} % Required for custom colors
+\usepackage{graphicx} % Required to insert images
+\usepackage{listings} % Required for insertion of code
+\usepackage{courier} % Required for the courier font
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
+\usepackage{pgfplotstable} % Import csv data
+\usepackage{mathtools}
+\usepackage{amsmath,amssymb} % Math equation tools
+\usepackage{hyperref} % Create references\pgfplotsset{compat=1.12}
+\usepackage{filecontents}% Used so that the external files can be placed in this file
+\usepackage{pgf} % Loops in latex
+\usepackage{bookmark}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{siunitx} % Formats the units and values
+\usepackage{parskip}
+\usepackage{chngcntr}
+\usepackage{tikz}
+\usetikzlibrary{bayesnet}
+
+\setlength{\parskip}{10pt} % 1ex plus 0.5ex minus 0.2ex}
+
+% Setup siunitx:
+\sisetup{
+  round-mode          = places, % Rounds numbers
+  round-precision     = 4, % to 2 places
+}
+
+% Margins
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1} % Line spacing
+\renewcommand{\tableautorefname}{Table} % PS
+\renewcommand{\equationautorefname}{Eq.} % PS
+
+% Set up the header and footer
+\pagestyle{fancy}
+\chead{\hmwkClass\ (\hmwkClassTime): \hmwkTitle} % Top center head
+\rhead{\firstxmark} % Top right header
+\lhead{}
+\lfoot{\lastxmark} % Bottom left footer
+\cfoot{} % Bottom center footer
+\rfoot{Page\ \thepage\ of\ \protect\pageref{LastPage}} % Bottom right footer
+\renewcommand\headrulewidth{0.4pt} % Size of the header rule
+\renewcommand\footrulewidth{0.4pt} % Size of the footer rule
+
+\renewcommand{\lstlistingname}{Code}
+\newcommand{\indep}{\mathrel{\text{\scalebox{1.07}{$\perp\mkern-10mu\perp$}}}}
+
+\DeclareGraphicsExtensions{.eps,.pdf,.png,.jpg}
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs
+
+%----------------------------------------------------------------------------------------
+%	CODE INCLUSION CONFIGURATION
+%----------------------------------------------------------------------------------------
+
+\definecolor{MyDarkGreen}{rgb}{0.0,0.4,0.0} % This is the color used for comments
+\lstloadlanguages{Perl} % Load Perl syntax for listings, for a list of other languages supported see: ftp://ftp.tex.ac.uk/tex-archive/macros/latex/contrib/listings/listings.pdf
+\lstset{language=Perl, % Use Perl in this example
+        frame=single, % Single frame around code
+        basicstyle=\small\ttfamily, % Use small true type font
+        keywordstyle=[1]\color{Blue}\bf, % Perl functions bold and blue
+        keywordstyle=[2]\color{Purple}, % Perl function arguments purple
+        keywordstyle=[3]\color{Blue}\underbar, % Custom functions underlined and blue
+        identifierstyle=, % Nothing special about identifiers                                         
+        commentstyle=\usefont{T1}{pcr}{m}{sl}\color{MyDarkGreen}\small, % Comments small dark green courier font
+        stringstyle=\color{Purple}, % Strings are purple
+        showstringspaces=false, % Don't put marks in string spaces
+        tabsize=5, % 5 spaces per tab
+        %
+        % Put standard Perl functions not included in the default language here
+        morekeywords={rand},
+        %
+        % Put Perl function parameters here
+        morekeywords=[2]{on, off, interp},
+        %
+        % Put user defined functions here
+        morekeywords=[3]{test},
+       	%
+        morecomment=[l][\color{Blue}]{...}, % Line continuation (...) like blue comment
+        numbers=left, % Line numbers on left
+        firstnumber=1, % Line numbers start with line 1
+        numberstyle=\tiny\color{Blue}, % Line numbers are blue and small
+        stepnumber=5 % Line numbers go in steps of 5
+}
+
+% Creates a new command to include a perl script, the first parameter is the filename of the script (without .pl), the second parameter is the caption
+\newcommand{\perlscript}[2]{
+\begin{itemize}
+\item[]\lstinputlisting[caption=#2,label=#1]{#1.pl}
+\end{itemize}
+}
+
+%----------------------------------------------------------------------------------------
+%	DOCUMENT STRUCTURE COMMANDS
+%	Skip this unless you know what you're doing
+%----------------------------------------------------------------------------------------
+
+% Header and footer for when a page split occurs within a problem environment
+\newcommand{\enterProblemHeader}[1]{
+%\nobreak\extramarks{#1}{#1 continued on next page\ldots}\nobreak
+%\nobreak\extramarks{#1 (continued)}{#1 continued on next page\ldots}\nobreak
+}
+
+% Header and footer for when a page split occurs between problem environments
+\newcommand{\exitProblemHeader}[1]{
+%\nobreak\extramarks{#1 (continued)}{#1 continued on next page\ldots}\nobreak
+%\nobreak\extramarks{#1}{}\nobreak
+}
+
+\setcounter{secnumdepth}{0} % Removes default section numbers
+\newcounter{homeworkProblemCounter} % Creates a counter to keep track of the number of problems
+
+\newcommand{\homeworkProblemName}{}
+\newenvironment{homeworkProblem}[1][Task \arabic{homeworkProblemCounter}]{ % Makes a new environment called homeworkProblem which takes 1 argument (custom name) but the default is "Problem #"
+\def\sectionautorefname{Task}
+\refstepcounter{homeworkProblemCounter}%
+\renewcommand{\homeworkProblemName}{#1} % Assign \homeworkProblemName the name of the problem
+\section{\homeworkProblemName} % Make a section in the document with the custom problem count
+\enterProblemHeader{\homeworkProblemName} % Header and footer within the environment
+}{
+\exitProblemHeader{\homeworkProblemName} % Header and footer after the environment
+}
+
+\newcommand{\problemAnswer}[1]{ % Defines the problem answer command with the content as the only argument
+\noindent\framebox[\columnwidth][c]{\begin{minipage}{0.98\columnwidth}#1\end{minipage}} % Makes the box around the problem answer and puts the content inside
+}
+
+\newcommand{\homeworkSectionName}{}
+\newenvironment{homeworkSection}[1]{ % New environment for sections within homework problems, takes 1 argument - the name of the section
+\renewcommand{\homeworkSectionName}{#1} % Assign \homeworkSectionName to the name of the section from the environment argument
+\subsection{\homeworkSectionName} % Make a subsection with the custom name of the subsection
+\enterProblemHeader{\homeworkProblemName\ [\homeworkSectionName]} % Header and footer within the environment
+}{
+\enterProblemHeader{\homeworkProblemName} % Header and footer after the environment
+}
+
+%----------------------------------------------------------------------------------------
+%	NAME AND CLASS SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\hmwkTitle}{Assignment 4} % Assignment title
+\newcommand{\hmwkDueDate}{Thursday,\ April\ 7,\ 2016} % Due date
+\newcommand{\hmwkClass}{ECE521} % Course/class
+\newcommand{\hmwkClassTime}{L0101} % Class/lecture time
+\newcommand{\hmwkAuthorName}{Davi Frossard} % Your name
+
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\title{
+\vspace{2in}
+\textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+\normalsize\vspace{0.1in}\small{Due\ on\ \hmwkDueDate}\\
+\vspace{0.1in}
+\vspace{3in}
+}
+
+\author{\textbf{Davi Frossard} \\ \textbf{Erich Sato} \\ \textbf{Mauro Brito}}
+%\date{} % Insert date here if you want it to appear below your name
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle
+\clearpage
+
+
+%----------------------------------------------------------------------------------------
+%	PART 1
+%----------------------------------------------------------------------------------------
+
+\begin{center}
+\section{Graphical Models}
+\homeworkSectionName{Graphical models from factorization}
+\end{center}
+
+\begin{homeworkProblem}
+\label{gm1}
+
+If we draw a Bayesian network representation of \autoref{eq1} we get \autoref{bn1}.
+\begin{equation}
+\label{eq1}
+P(a,b,c,d,e,f) = P(a|b)P(b)P(c|a,b)P(d|b)P(e|c)P(f|b,e)
+\end{equation}
+
+\begin{figure}[ht]
+	\begin{center}
+		\tikz{ %
+			\node[latent] (e) {$e$} ; %
+			\node[obs, below=of e, xshift=-1cm] (f) {$f$} ; %
+			\node[latent, above=of e, xshift=-2cm] (d) {$d$} ; %
+			\node[latent, above=of e] (c) {$c$} ; %
+			\node[latent, above=of c, xshift=1cm] (a) {$a$} ; %
+			\node[latent, above=of a, xshift=-2cm] (b) {$b$} ; %
+			\edge {e,b} {f} ; %
+			\edge {c} {e} ; %
+			\edge {b,a} {c} ; %
+			\edge {b} {a} ; %
+			\edge {b} {d} ; %
+		}
+	\end{center}
+	\caption{Bayesian Network Representation of \autoref{eq1}.}
+	\label{bn1}
+\end{figure}
+
+
+\clearpage
+\end{homeworkProblem}
+%----------------------------------------------------------------------------------------
+
+%----------------------------------------------------------------------------------------
+%	PART 2
+%----------------------------------------------------------------------------------------
+
+\begin{homeworkProblem}
+\label{gm2}
+
+Let us rewrite the joint distribution from \autoref{eq1} as \autoref{eq2}.
+\begin{equation}
+\label{eq2}
+P(a,b,c,d,e,f) = f_1(a,b)f_2(b)f_3(c,a,b)f_4(d,b)f_5(e,c)f_6(f,b,e)
+\end{equation}	
+
+If we now draw the corresponding factor graph we obtain \autoref{fg1}.
+
+\begin{figure}[ht]
+	\begin{center}
+		\tikz{ %
+			\node[latent] (b) {$b$};
+			\node[latent, below=of b, xshift=2cm] (a) {$a$};
+			\node[latent, below=of a] (c) {$c$};
+			\node[latent, left=of c, xshift=-3cm] (d) {$d$};
+			\node[latent, below=of c, xshift=2cm] (e) {$e$};
+			\node[obs, below=of e, xshift=-4cm] (f) {$f$};
+			\factor[right=of b] {f1} {$f_1$} {b} {a};
+			\factor[above=of b] {f2} {$f_2$} {} {b};
+			\factor[left=of a] {f3} {$f_3$} {a,b} {c};
+			\factor[left=of b] {f4} {$f_4$} {b} {d};
+			\factor[right=of c] {f5} {$f_5$} {c} {e};
+			\factor[left=of e, xshift=-3.15cm]{f6} {180:$f_6$} {b,e} {f};
+		}
+	\end{center}
+	\caption{Factor Graph Representation of \autoref{eq2}.}
+	\label{fg1}
+\end{figure}
+
+\clearpage
+\end{homeworkProblem}
+%----------------------------------------------------------------------------------------
+
+
+%----------------------------------------------------------------------------------------
+%	PART 3
+%----------------------------------------------------------------------------------------
+
+\begin{homeworkProblem}
+\label{gm3}
+
+%TODO
+
+\clearpage
+\end{homeworkProblem}
+%----------------------------------------------------------------------------------------
+
+%----------------------------------------------------------------------------------------
+%	PART 4
+%----------------------------------------------------------------------------------------
+
+\begin{center}
+	\subsection{Conversion between graphical models}
+	\setcounter{homeworkProblemCounter}{0}
+\end{center}
+
+\begin{homeworkProblem}
+\label{gm4}
+
+%TODO
+
+\clearpage
+\end{homeworkProblem}
+%----------------------------------------------------------------------------------------
+
+%----------------------------------------------------------------------------------------
+%	PART 5
+%----------------------------------------------------------------------------------------
+
+\begin{homeworkProblem}
+\label{gm5}
+
+%TODO
+
+\clearpage
+\end{homeworkProblem}
+%----------------------------------------------------------------------------------------
+
+%----------------------------------------------------------------------------------------
+%	PART 6
+%----------------------------------------------------------------------------------------
+
+\begin{homeworkProblem}
+\label{gm6}
+
+%TODO
+
+\clearpage
+\end{homeworkProblem}
+%----------------------------------------------------------------------------------------
+
+%----------------------------------------------------------------------------------------
+%	PART 7
+%----------------------------------------------------------------------------------------
+
+\begin{center}
+	\subsection{Conditional Independence in Bayesian Networks}
+	\setcounter{homeworkProblemCounter}{0}
+\end{center}
+
+\begin{homeworkProblem}
+\label{gm7}
+
+We can express the joint probability of the Bayesian Network provided using \autoref{eq3}.
+
+\begin{equation}
+\label{eq3}
+P(a,b,c,d,e,f) = P(a)P(b|a)P(f|b)P(e)P(c|b,e)P(d|b,c)
+\end{equation}
+
+\clearpage
+\end{homeworkProblem}
+%----------------------------------------------------------------------------------------
+
+%----------------------------------------------------------------------------------------
+%	PART 8
+%----------------------------------------------------------------------------------------
+
+\begin{homeworkProblem}
+\label{gm8}
+
+\begin{itemize}
+\item $\boldsymbol{a\indep c}$ : FALSE 
+\subitem Consider $P(c) = \begin{dcases} 1 & P(b) + P(e) > 1\\0 & otherwise\end{dcases}$, now let us assume $P(b) = P(a) = \mathcal{N}(0,1)$. Therefore we have  $P(c) = \begin{dcases} 1 & P(a) + P(e) > 1\\0 & otherwise\end{dcases}$, which clearly shows that \textbf{a} is not independent of \textbf{c}.
+
+\item $\boldsymbol{a\indep c|b}$ : TRUE 
+\subitem If we marginalize the distribution in \autoref{gm7} over \textbf{a} and \textbf{c} we obtain $P(a,c|b) = P(a)P(b|a)P(e)P(c|b,e)$
+
+\end{itemize}
+
+\clearpage
+\end{homeworkProblem}
+%----------------------------------------------------------------------------------------
+
+\end{document}
